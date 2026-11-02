@@ -1,0 +1,2012 @@
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Planer Financeiro 2027 · Finanças Integradas</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon-192.png">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background: linear-gradient(145deg, #0a2b3e 0%, #1b4f6e 100%);
+    min-height: 100vh; padding: 24px;
+}
+.app-container { max-width: 1600px; margin: 0 auto; }
+.glass-header {
+    background: rgba(255,255,255,0.12); backdrop-filter: blur(16px);
+    border-radius: 48px; padding: 24px 32px; margin-bottom: 28px;
+    border: 1px solid rgba(255,255,255,0.25);
+    box-shadow: 0 20px 40px -12px rgba(0,0,0,0.3);
+}
+.header-title { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.header-title h1 {
+    font-size: 2rem; font-weight: 700;
+    background: linear-gradient(135deg, #fff, #b8e1fc);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
+}
+.header-title h1 i { background: none; -webkit-text-fill-color: #7bc5e8; margin-right: 12px; }
+.date-controls {
+    display: flex; gap: 16px; background: rgba(0,0,0,0.35);
+    padding: 10px 24px; border-radius: 60px; backdrop-filter: blur(4px);
+}
+.date-controls select {
+    background: white; border: none; padding: 10px 20px;
+    border-radius: 40px; font-weight: 600; font-size: 1rem;
+    cursor: pointer; font-family: 'Inter', monospace; color: #1a4b6e;
+}
+.btn-save-month {
+    background: linear-gradient(135deg, #3aa87e, #2c7a5c);
+    border: none; padding: 10px 28px; border-radius: 40px;
+    font-weight: 700; color: white; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 10px; font-size: 0.9rem;
+}
+.btn-save-month:hover { transform: scale(1.02); box-shadow: 0 8px 20px rgba(58,168,126,0.4); }
+.tabs-modern {
+    display: flex; gap: 12px; margin-bottom: 28px;
+    flex-wrap: wrap; justify-content: center;
+}
+.tab-btn {
+    background: rgba(255,255,255,0.1); backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.2); padding: 14px 32px;
+    border-radius: 60px; font-weight: 600; font-size: 1rem;
+    color: #eef4ff; cursor: pointer; transition: all 0.25s;
+    display: flex; align-items: center; gap: 10px;
+}
+.tab-btn i { font-size: 1.2rem; }
+.tab-btn:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px); }
+.tab-btn.active {
+    background: linear-gradient(135deg, #f9b43a, #fb8c42);
+    color: #1e2f3a; border-color: transparent;
+    box-shadow: 0 8px 20px rgba(249,180,58,0.3);
+}
+.tab-content {
+    display: none; background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px); border-radius: 40px; padding: 32px;
+    box-shadow: 0 30px 50px -20px rgba(0,0,0,0.4);
+    animation: fadeSlide 0.3s ease;
+}
+.tab-content.active { display: block; }
+@keyframes fadeSlide { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.stats-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px; margin-bottom: 40px;
+}
+.stat-card {
+    background: linear-gradient(115deg, #ffffff, #f8fbfe);
+    border-radius: 32px; padding: 24px;
+    box-shadow: 0 12px 28px -12px rgba(0,0,0,0.12);
+    border: 1px solid rgba(100,160,200,0.2); transition: all 0.2s;
+}
+.stat-card:hover { transform: translateY(-4px); }
+.stat-title {
+    font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;
+    font-weight: 700; color: #4a6f8a; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+}
+.stat-value {
+    font-size: 2.5rem; font-weight: 800;
+    background: linear-gradient(135deg, #1b5e7a, #3282a7);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.data-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+.data-table th {
+    text-align: left; padding: 16px 12px; background: #eef3fc;
+    border-radius: 20px 20px 8px 8px; color: #1f5068; font-weight: 700;
+}
+.data-table td { padding: 12px; border-bottom: 1px solid #dce9f2; }
+.data-table input {
+    background: white; border: 2px solid #d4e2f0;
+    border-radius: 28px; padding: 8px 16px; font-size: 0.9rem;
+    width: 130px; text-align: right; font-weight: 500; transition: 0.15s;
+}
+.data-table input:focus {
+    border-color: #fb8c42; outline: none;
+    box-shadow: 0 0 0 3px rgba(251,140,66,0.2);
+}
+.income-dia20, .income-dia5, .income-outros {
+    font-size: 1.15rem !important; font-weight: 700 !important;
+    color: #1f5068 !important; text-align: right;
+}
+.liq-cell {
+    font-size: 1.2rem !important; font-weight: 800 !important;
+    color: #3aa87e !important; text-align: right;
+}
+#totalLiquidoDisplay {
+    font-size: 1.4rem !important; font-weight: 800 !important;
+    color: #1f5068 !important;
+}
+.rateio-panel {
+    background: linear-gradient(115deg, #eef4fa, #f9fdfe);
+    border-radius: 32px; padding: 28px; margin: 30px 0;
+    border-left: 6px solid #fb8c42;
+}
+.rateio-cards {
+    display: flex; flex-wrap: wrap; gap: 20px;
+    justify-content: space-between; margin: 20px 0;
+}
+.person-card {
+    flex: 1; min-width: 150px; background: white;
+    border-radius: 28px; padding: 18px; text-align: center;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+    border: 1px solid #cfe2ef;
+}
+.person-name { font-weight: 800; font-size: 1.2rem; color: #2c5a78; }
+.person-value { font-size: 1.8rem; font-weight: 800; color: #3aa87e; margin: 10px 0; }
+.person-percent { font-size: 0.8rem; color: #fb8c42; font-weight: 600; margin-top: 8px; }
+.charts-row { display: flex; flex-wrap: wrap; gap: 30px; margin: 40px 0; }
+.chart-box {
+    flex: 1; background: white; border-radius: 32px;
+    padding: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+.chart-box canvas { max-height: 280px; width: 100%; }
+.chart-box.chart-doughnut-dual { display: flex; flex-direction: column; padding: 24px; }
+.chart-box.chart-doughnut-dual .chart-dual-title {
+    font-size: 0.9rem; font-weight: 700; color: #4a6f8a;
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 16px; text-align: left;
+}
+.chart-dual-body { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+.chart-dual-canvas-col {
+    flex: 1 1 220px; min-width: 200px; max-width: 320px;
+    display: flex; align-items: center; justify-content: flex-start;
+}
+.chart-dual-canvas-col canvas { width: 100%; max-height: 260px; }
+.chart-dual-legend-col {
+    flex: 1 1 220px; min-width: 200px;
+    display: flex; flex-direction: column; gap: 10px; justify-content: center;
+}
+.legend-item {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 10px 14px; border-radius: 16px;
+    background: #f4f9fd; border: 1px solid #e1ecf5;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.legend-item:hover { transform: translateX(2px); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+.legend-item-left { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 0 1 auto; }
+.legend-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+.legend-name { font-weight: 700; color: #2c5a78; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.legend-amount-center { flex: 1 1 auto; text-align: center; font-size: 1.05rem; font-weight: 800; color: #1f5068; letter-spacing: -0.01em; white-space: nowrap; }
+.legend-percent { flex: 0 0 auto; font-weight: 800; color: #1f5068; font-size: 1rem; text-align: right; white-space: nowrap; }
+.sobras-card {
+    background: linear-gradient(115deg, #eef4fa, #f9fdfe);
+    border-radius: 32px; padding: 24px; margin-top: 30px;
+    border-left: 6px solid #3aa87e;
+}
+.sobras-title {
+    font-size: 1.1rem; font-weight: 700; color: #1f5068;
+    margin-bottom: 20px; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: 16px;
+}
+.total-percent-badge {
+    background: #fb8c42; color: white; padding: 6px 16px;
+    border-radius: 40px; font-size: 0.85rem; font-weight: 600;
+}
+.sobras-nominais-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px; margin-bottom: 0;
+}
+.sobra-nominal-card {
+    background: rgba(255,255,255,0.85); backdrop-filter: blur(8px);
+    border-radius: 24px; padding: 20px 18px; text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    border: 1px solid rgba(100,160,200,0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.sobra-nominal-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,0.1); }
+.sobra-nominal-card.dia5 { background: linear-gradient(135deg, rgba(251,140,66,0.18), rgba(255,255,255,0.9)); border-left: 4px solid #fb8c42; }
+.sobra-nominal-card.dia20 { background: linear-gradient(135deg, rgba(58,168,126,0.18), rgba(255,255,255,0.9)); border-left: 4px solid #3aa87e; }
+.sobra-nominal-nome { font-weight: 800; font-size: 1.05rem; color: #1f5068; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.sobra-nominal-nome i { font-size: 1.1rem; }
+.sobra-nominal-valor { font-size: 1.9rem; font-weight: 800; color: #3aa87e; margin: 8px 0; letter-spacing: -0.02em; }
+.sobra-nominal-valor.negativo { color: #e74c3c; }
+.sobra-nominal-desc { font-size: 0.85rem; color: #4a6f8a; font-weight: 600; margin-top: 6px; }
+.sobra-nominal-detail { font-size: 0.8rem; color: #6b8ba3; margin-top: 4px; }
+.invest-stats-card {
+    background: linear-gradient(115deg, #ffffff, #f8fbfe);
+    border-radius: 32px; padding: 24px; margin-bottom: 30px;
+    box-shadow: 0 12px 28px -12px rgba(0,0,0,0.12);
+    border: 1px solid rgba(100,160,200,0.2);
+}
+.invest-stats-title {
+    font-size: 1.2rem; font-weight: 700; color: #1f5068;
+    margin-bottom: 20px; display: flex; align-items: center; gap: 12px;
+    border-bottom: 2px solid #fb8c42; padding-bottom: 10px;
+}
+.invest-summary-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px; margin-bottom: 20px;
+}
+.invest-summary-item { background: #eef4fa; border-radius: 24px; padding: 16px; text-align: center; }
+.invest-summary-label { font-size: 0.8rem; text-transform: uppercase; font-weight: 600; color: #4a6f8a; margin-bottom: 8px; }
+.invest-summary-value { font-size: 2.2rem !important; font-weight: 800 !important; color: #2c5a78 !important; letter-spacing: -0.02em; }
+.invest-note {
+    background: #fef9e6; border-radius: 20px; padding: 12px 16px;
+    margin-top: 16px; font-size: 0.8rem; color: #6b8ba3;
+    text-align: center; border-left: 4px solid #fb8c42;
+}
+.distribute-excedente-bar {
+    background: #eef4fa; border-radius: 28px; padding: 16px 24px;
+    margin-bottom: 24px; display: flex; flex-wrap: wrap;
+    align-items: center; justify-content: space-between; gap: 16px;
+}
+.distribute-excedente-bar label { font-weight: 700; color: #2c5a78; }
+.distribute-excedente-bar select { padding: 8px 16px; border-radius: 40px; border: 1px solid #fb8c42; background: white; font-weight: 500; }
+.btn-distribute {
+    background: linear-gradient(135deg, #fb8c42, #f9b43a);
+    border: none; padding: 8px 20px; border-radius: 40px;
+    font-weight: 600; color: white; cursor: pointer; transition: 0.2s;
+}
+.btn-distribute:hover { transform: scale(1.02); box-shadow: 0 4px 12px rgba(251,140,66,0.3); }
+.excedente-suggestion { font-size: 0.8rem; color: #3aa87e; font-weight: 600; }
+.action-buttons { display: flex; gap: 16px; justify-content: flex-end; margin-top: 24px; }
+.btn-secondary {
+    background: #eef2f7; border: none; padding: 12px 24px;
+    border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s;
+}
+.btn-secondary:hover { background: #e2eaf2; transform: scale(0.98); }
+.footer-note { margin-top: 30px; text-align: center; color: #eef4ff; font-size: 0.8rem; }
+.invest-suggestion-cell { background: #fef9e6; }
+.patrimonio-input-box {
+    background: #eef4fa; border-radius: 28px; padding: 16px 24px;
+    margin-bottom: 24px; display: flex; flex-wrap: wrap;
+    align-items: center; justify-content: space-between; gap: 16px;
+    border-left: 6px solid #3aa87e;
+}
+.patrimonio-input-box label { font-weight: 700; color: #2c5a78; font-size: 1.15rem !important; }
+.patrimonio-input-box input {
+    padding: 12px 22px; border-radius: 40px; border: 1px solid #3aa87e;
+    background: white; font-weight: 700; color: #2c5a78;
+    width: 200px; text-align: right; font-size: 1.25rem !important;
+}
+.contribuicoes-filhos-panel {
+    background: linear-gradient(115deg, #eef4fa, #f9fdfe);
+    border-radius: 28px; padding: 24px; margin-bottom: 28px;
+    border-left: 6px solid #3aa87e;
+}
+.contribuicoes-filhos-title {
+    font-size: 1rem; font-weight: 700; color: #1f5068;
+    margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+}
+.contribuicoes-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+}
+.contribuicao-item {
+    background: white; border-radius: 24px; padding: 16px;
+    text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border: 1px solid #cfe2ef;
+}
+.contribuicao-item-nome { font-weight: 800; color: #2c5a78; font-size: 1rem; margin-bottom: 6px; }
+.contribuicao-item-valor { font-size: 1.5rem; font-weight: 800; color: #3aa87e; }
+.contribuicao-item-desc { font-size: 0.72rem; color: #6b8ba3; margin-top: 6px; }
+.contribuicao-total-geral {
+    background: linear-gradient(135deg, #3aa87e, #2c7a5c);
+    color: white; border-radius: 24px; padding: 16px; text-align: center;
+}
+.contribuicao-total-geral .contribuicao-item-nome { color: #eafaf3; }
+.contribuicao-total-geral .contribuicao-item-valor { color: white; }
+.contribuicao-total-geral .contribuicao-item-desc { color: #d5f2e6; }
+.expenses-quinzena-wrapper { display: flex; flex-wrap: wrap; gap: 30px; }
+.expenses-quinzena-block {
+    flex: 1; min-width: 320px;
+    background: linear-gradient(115deg, #eef4fa, #f9fdfe);
+    border-radius: 32px; padding: 24px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+.expenses-quinzena-block.dia5 { border-left: 6px solid #fb8c42; }
+.expenses-quinzena-block.dia20 { border-left: 6px solid #3aa87e; }
+.expenses-quinzena-title {
+    font-size: 1.2rem; font-weight: 800; color: #1f5068;
+    margin-bottom: 16px; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: 12px;
+}
+.expenses-quinzena-title .badge-total {
+    background: white; padding: 6px 16px; border-radius: 40px;
+    font-size: 1.05rem !important; color: #2c5a78; font-weight: 800;
+    border: 1px solid #cfe2ef; box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+.expenses-quinzena-table { width: 100%; border-collapse: collapse; }
+.expenses-quinzena-table th {
+    text-align: left; padding: 10px 8px;
+    background: rgba(255,255,255,0.7); color: #1f5068;
+    font-size: 0.85rem; font-weight: 700;
+    border-radius: 16px 16px 8px 8px;
+}
+.expenses-quinzena-table th:last-child { text-align: right; }
+.expenses-quinzena-table td { padding: 8px; border-bottom: 1px solid #dce9f2; }
+.expenses-quinzena-table td input {
+    background: white; border: 2px solid #d4e2f0;
+    border-radius: 28px; padding: 8px 16px;
+    font-size: 1.1rem !important; font-weight: 700 !important;
+    color: #1f5068 !important; width: 100%; max-width: 140px;
+    text-align: right;
+}
+.expenses-quinzena-table td input:focus { border-color: #fb8c42; outline: none; box-shadow: 0 0 0 3px rgba(251,140,66,0.2); }
+.expenses-quinzena-table td:first-child { font-weight: 600; color: #2c5a78; }
+.expenses-quinzena-table tfoot td {
+    font-size: 1.15rem !important; font-weight: 800 !important;
+    color: #1f5068 !important; padding: 12px 8px;
+}
+#totalDia5Footer, #totalDia20Footer { font-size: 1.25rem !important; font-weight: 800 !important; color: #2c5a78 !important; }
+#totalGeralDespesasBadge { font-size: 1.35rem !important; font-weight: 800 !important; }
+.expense-desc-input {
+    background: transparent !important; border: none !important;
+    border-bottom: 1px dashed transparent !important;
+    border-radius: 0 !important; padding: 4px 2px !important;
+    font-weight: 600 !important; color: #2c5a78 !important;
+    width: 100% !important; max-width: 100% !important;
+    text-align: left !important; box-shadow: none !important;
+    font-size: 0.9rem !important;
+}
+.expense-desc-input:focus {
+    border-bottom: 1px dashed #fb8c42 !important;
+    outline: none !important; box-shadow: none !important;
+}
+.expenses-quinzena-table tr.pago { background: rgba(58,168,126,0.15); color: #1e6b4e; }
+.expenses-quinzena-table tr.pago td { color: #1e6b4e; }
+.expenses-quinzena-table tr.pago input {
+    background: rgba(58,168,126,0.1) !important;
+    color: #1e6b4e !important; border-color: #3aa87e !important;
+}
+.expenses-quinzena-table tr.pago .expense-desc-input { color: #1e6b4e !important; background: transparent !important; }
+.btn-pg {
+    background: rgba(255,255,255,0.9); border: 2px solid #cfe2ef;
+    border-radius: 40px; padding: 4px 12px; font-size: 0.72rem;
+    font-weight: 800; cursor: pointer; color: #6b8ba3;
+    transition: 0.2s; min-width: 44px;
+}
+.btn-pg:hover { transform: scale(1.05); }
+.btn-pg.pago { background: linear-gradient(135deg, #3aa87e, #2c7a5c); color: white; border-color: transparent; }
+.meta-row {
+    background: #eef4fa; border-radius: 28px; padding: 16px 24px;
+    margin-bottom: 24px; display: flex; flex-wrap: wrap;
+    align-items: center; justify-content: space-between; gap: 16px;
+    border-left: 6px solid #fb8c42;
+}
+.meta-block { display: flex; align-items: center; gap: 10px; background: white; padding: 8px 16px; border-radius: 40px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+.meta-block label { font-weight: 700; color: #2c5a78; font-size: 0.9rem; }
+.meta-block input {
+    padding: 8px 14px; border-radius: 40px;
+    border: 1px solid #fb8c42; background: #fef9e6;
+    font-weight: 700; color: #2c5a78; width: 70px;
+    text-align: center; font-size: 0.95rem;
+}
+.meta-block.meta-filhos { border: 1px solid #3aa87e; }
+.meta-block.meta-filhos input { border-color: #3aa87e; background: #eafaf3; }
+.meta-block.meta-filhos label { color: #1e6b4e; }
+.meta-block.meta-casa { border: 1px solid #3282a7; }
+.meta-block.meta-casa input { border-color: #3282a7; background: #eaf4fa; }
+.meta-block.meta-casa label { color: #1f5068; }
+.meta-result { font-weight: 800; color: #3aa87e; font-size: 1rem; }
+.meta-result.filhos-result { color: #1e6b4e; }
+.meta-result.casa-result { color: #3282a7; }
+.destino-filhos-card {
+    background: linear-gradient(115deg, #eafaf3, #f5fff9);
+    border-radius: 32px; padding: 24px 28px; margin-bottom: 24px;
+    border-left: 6px solid #3aa87e;
+    display: flex; flex-direction: column; gap: 20px;
+}
+.destino-filhos-title { font-weight: 800; color: #1e6b4e; font-size: 1.15rem; display: flex; align-items: center; gap: 10px; }
+.destino-filhos-valores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; width: 100%; }
+.destino-item {
+    background: white; border-radius: 24px; padding: 22px 20px;
+    text-align: center; box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+    border: 1px solid #cfe2ef; display: flex; flex-direction: column;
+    justify-content: center; gap: 10px; min-height: 120px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.destino-item:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.1); }
+.destino-item-label {
+    font-size: 0.95rem !important; color: #4a6f8a !important;
+    font-weight: 700 !important; text-transform: uppercase;
+    letter-spacing: 0.8px; line-height: 1.3;
+}
+.destino-item-valor {
+    font-size: 2rem !important; font-weight: 800 !important;
+    color: #3aa87e !important; letter-spacing: -0.02em; line-height: 1.1;
+}
+.destino-item-valor.livre { color: #1e6b4e !important; }
+.destino-item-valor.casa { color: #3282a7 !important; }
+.destino-item.destino-total { border-left: 4px solid #3aa87e; }
+.destino-item.destino-invest { border-left: 4px solid #3282a7; }
+.destino-item.destino-casa { border-left: 4px solid #f9b43a; }
+.saldo-livre-filhos-box {
+    background: white; border-radius: 24px; padding: 18px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px; border: 1px solid #cfe2ef;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-top: 4px;
+}
+.saldo-livre-filhos-label {
+    font-weight: 700; color: #4a6f8a; font-size: 0.95rem;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    display: flex; align-items: center; gap: 8px;
+}
+.saldo-livre-filhos-valor { font-size: 1.8rem; font-weight: 800; color: #1e6b4e; letter-spacing: -0.02em; }
+.patrimonio-legend { text-align: center; margin-top: 16px; color: #2c5a78 !important; font-size: 1.05rem !important; font-weight: 600; }
+.patrimonio-legend span { font-weight: 800 !important; }
+@media (max-width: 900px) {
+    .destino-filhos-valores { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="app-container">
+
+    <!-- HEADER -->
+    <div class="glass-header">
+        <div class="header-title">
+            <h1><i class="fas fa-chart-line"></i> Planer Financeiro 2027 · Finanças Integradas</h1>
+            <div class="date-controls">
+                <select id="monthSelect"></select>
+                <select id="yearSelect"></select>
+                <button id="btnSaveMonth" class="btn-save-month"><i class="fas fa-save"></i> Salvar mês</button>
+            </div>
+        </div>
+        <div style="margin-top: 16px; color:#cae3f0; font-size:0.85rem;">
+            <i class="fas fa-users"></i> Planejamento Financeiro Familiar
+        </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs-modern">
+        <button class="tab-btn active" data-tab="tabDashboard"><i class="fas fa-chart-pie"></i> Dashboard Principal</button>
+        <button class="tab-btn" data-tab="tabIncomes"><i class="fas fa-coins"></i> Rendimentos</button>
+        <button class="tab-btn" data-tab="tabExpenses"><i class="fas fa-receipt"></i> Despesas do Mês</button>
+        <button class="tab-btn" data-tab="tabInvest"><i class="fas fa-chart-simple"></i> Investimentos</button>
+        <button class="tab-btn" data-tab="tabPatrimonio"><i class="fas fa-treemap"></i> Evolução Patrimonial</button>
+    </div>
+    <!-- ============ DASHBOARD PRINCIPAL ============ -->
+    <div id="tabDashboard" class="tab-content active">
+
+        <!-- Cards de resumo -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-title"><i class="fas fa-hand-holding-usd"></i> Renda Líquida Total</div>
+                <div class="stat-value" id="dashTotalIncome">R$ 0,00</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title"><i class="fas fa-home"></i> Despesas Totais</div>
+                <div class="stat-value" id="dashTotalExpenses">R$ 0,00</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title"><i class="fas fa-piggy-bank"></i> Saldo do Mês (Renda − Despesas)</div>
+                <div class="stat-value" id="dashBalance">R$ 0,00</div>
+            </div>
+        </div>
+
+        <!-- Metas -->
+        <div class="meta-row">
+            <div class="meta-block">
+                <label><i class="fas fa-percent"></i> Meta Casal:</label>
+                <input type="number" id="metaPercentInput" value="15" min="0" max="100" step="1">
+                <span class="meta-result">Meta: <span id="metaResultLabel">R$ 0,00</span></span>
+            </div>
+            <div class="meta-block meta-filhos">
+                <label><i class="fas fa-chart-line"></i> % Meta Filhos:</label>
+                <input type="number" id="filhosPercentInput" value="50" min="0" max="100" step="1">
+                <span class="meta-result filhos-result">Invest.: <span id="filhosDestinadoLabel">R$ 0,00</span></span>
+            </div>
+            <div class="meta-block meta-casa">
+                <label><i class="fas fa-home"></i> % Casa:</label>
+                <input type="number" id="casaPercentInput" value="30" min="0" max="100" step="1">
+                <span class="meta-result casa-result">Casa: <span id="casaDestinadoLabel">R$ 0,00</span></span>
+            </div>
+        </div>
+
+        <!-- Destinação dos filhos -->
+        <div class="destino-filhos-card">
+            <div class="destino-filhos-title"><i class="fas fa-hand-holding-heart"></i> Destinação dos Filhos</div>
+            <div class="destino-filhos-valores">
+                <div class="destino-item destino-total">
+                    <div class="destino-item-label">Total Filhos</div>
+                    <div class="destino-item-valor" id="destinoTotalFilhos">R$ 0,00</div>
+                </div>
+                <div class="destino-item destino-invest">
+                    <div class="destino-item-label">→ Investimentos/Metas</div>
+                    <div class="destino-item-valor" id="destinoInvestimentoFilhos">R$ 0,00</div>
+                </div>
+                <div class="destino-item destino-casa">
+                    <div class="destino-item-label">→ Custeio da Casa</div>
+                    <div class="destino-item-valor casa" id="destinoCusteioCasa">R$ 0,00</div>
+                </div>
+            </div>
+            <div class="saldo-livre-filhos-box">
+                <span class="saldo-livre-filhos-label"><i class="fas fa-wallet"></i> Saldo Livre dos Filhos</span>
+                <span class="saldo-livre-filhos-valor" id="destinoSaldoLivreFilhos">R$ 0,00</span>
+            </div>
+        </div>
+
+        <!-- Contribuições fixas dos filhos -->
+        <div class="contribuicoes-filhos-panel">
+            <div class="contribuicoes-filhos-title">
+                <i class="fas fa-child"></i> Contribuições Fixas dos Filhos no Mês
+            </div>
+            <div class="contribuicoes-grid" id="contribuicoesFilhosGrid"></div>
+        </div>
+
+        <!-- Rateio quinzenal -->
+        <div class="rateio-panel">
+            <h3 style="color:#2a5f7a;"><i class="fas fa-scale-balanced"></i> Fechamento Quinzenal (Dia 20 / Dia 5)</h3>
+            <p style="margin:8px 0 16px; color:#3f6b88;">Faturamento bruto, despesas da quinzena e divisão 50/50 das sobras para Fabi e Marcão</p>
+            <div id="rateioCardsContainer" class="rateio-cards"></div>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="charts-row">
+            <div class="chart-box chart-doughnut-dual">
+                <div class="chart-dual-title"><i class="fas fa-chart-pie" style="margin-right:8px; color:#fb8c42;"></i> Despesas por categoria</div>
+                <div class="chart-dual-body">
+                    <div class="chart-dual-canvas-col">
+                        <canvas id="categoryChart" height="260"></canvas>
+                    </div>
+                    <div class="chart-dual-legend-col" id="categoryLegendCol"></div>
+                </div>
+            </div>
+            <div class="chart-box">
+                <canvas id="balanceEvolution" height="240"></canvas>
+                <p style="text-align:center;">Evolução saldo (últimos 6 meses)</p>
+            </div>
+        </div>
+
+        <!-- Sobras do mês -->
+        <div class="sobras-card" id="sobrasCard">
+            <div class="sobras-title">
+                <span><i class="fas fa-money-bill-wave"></i> 💰 CAIXA - Sobras do Mês (livre para Fabi e Marcão)</span>
+                <span class="total-percent-badge" id="totalPercentBadge">Modelo A</span>
+            </div>
+            <div id="sobrasContainer" class="sobras-nominais-grid"></div>
+        </div>
+
+    </div>
+    <!-- FIM DO DASHBOARD -->
+    <!-- ============ RENDIMENTOS ============ -->
+    <div id="tabIncomes" class="tab-content">
+        <h2 style="margin-bottom:24px; color:#1a506b;"><i class="fas fa-money-bill-wave"></i> Rendimentos e Contribuições Fixas</h2>
+        <table class="data-table" id="incomeTable">
+            <thead>
+                <tr>
+                    <th>Membro</th>
+                    <th>Dia 20 (R$)</th>
+                    <th>Dia 5 (R$)</th>
+                    <th>Outros (R$)</th>
+                    <th>Total (R$)</th>
+                </tr>
+            </thead>
+            <tbody id="incomeTbody"></tbody>
+            <tfoot>
+                <tr style="background:#e9f2f9;">
+                    <td colspan="4"><strong>Total Líquido Família</strong></td>
+                    <td id="totalLiquidoDisplay">R$ 0,00</td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="footer-note" style="color:#3f6b88; margin-top:20px; text-align:left;">
+            <i class="fas fa-info-circle"></i> Salários do casal divididos entre Dia 20 e Dia 5. Marcos: Dia 20 + Dia 5. Marcela: Combustível no Dia 20 + Casa no Dia 5. Manoela: integral no Dia 20.
+        </div>
+    </div>
+
+    <!-- ============ DESPESAS ============ -->
+    <div id="tabExpenses" class="tab-content">
+        <h2 style="margin-bottom:24px;"><i class="fas fa-file-invoice"></i> Despesas mensais fixas · Divisão Quinzenal</h2>
+
+        <div class="expenses-quinzena-wrapper">
+
+            <!-- DIA 5 -->
+            <div class="expenses-quinzena-block dia5">
+                <div class="expenses-quinzena-title">
+                    <span><i class="fas fa-calendar-day"></i> Despesas Dia 5</span>
+                    <span class="badge-total">Total: <span id="totalDia5Badge">R$ 0,00</span></span>
+                </div>
+                <table class="expenses-quinzena-table">
+                    <thead>
+                        <tr><th style="width:44px;">PG</th><th>Descrição</th><th style="text-align:right;">Valor (R$)</th></tr>
+                    </thead>
+                    <tbody id="expensesDia5Tbody"></tbody>
+                    <tfoot>
+                        <tr style="background:#e9f2f9; font-weight:700;">
+                            <td colspan="2">TOTAL DIA 5</td>
+                            <td style="text-align:right;" id="totalDia5Footer">R$ 0,00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- DIA 20 -->
+            <div class="expenses-quinzena-block dia20">
+                <div class="expenses-quinzena-title">
+                    <span><i class="fas fa-calendar-day"></i> Despesas Dia 20</span>
+                    <span class="badge-total">Total: <span id="totalDia20Badge">R$ 0,00</span></span>
+                </div>
+                <table class="expenses-quinzena-table">
+                    <thead>
+                        <tr><th style="width:44px;">PG</th><th>Descrição</th><th style="text-align:right;">Valor (R$)</th></tr>
+                    </thead>
+                    <tbody id="expensesDia20Tbody"></tbody>
+                    <tfoot>
+                        <tr style="background:#e9f2f9; font-weight:700;">
+                            <td colspan="2">TOTAL DIA 20</td>
+                            <td style="text-align:right;" id="totalDia20Footer">R$ 0,00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+        </div>
+
+        <!-- Rateio Quinzenal + Total Geral -->
+        <div class="sobras-card" style="margin-top:30px;">
+            <div class="sobras-title"></div>
+            <div style="margin-top: 20px; width: 100%;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap;">
+
+                    <!-- Rateio Dia 5 -->
+                    <div style="flex: 1; min-width: 250px; background: rgba(255,255,255,0.7); padding: 16px; border-radius: 24px; border-left: 5px solid #fb8c42; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+                        <div style="font-size: 0.85rem; font-weight: 700; color: #4a6f8a; text-transform: uppercase; margin-bottom: 8px;"><i class="fas fa-calculator"></i> Rateio Vencimento Dia 5</div>
+                        <div style="font-size: 0.95rem; color: #2c5a78; font-weight: 600; margin-bottom: 4px;">👩 Para Fabi: <strong id="rateioFabiDia5" style="color: #fb8c42;">R$ 0,00</strong></div>
+                        <div style="font-size: 0.95rem; color: #2c5a78; font-weight: 600;">👨 Para Marcão: <strong id="rateioMarcaoDia5" style="color: #fb8c42;">R$ 0,00</strong></div>
+                    </div>
+
+                    <!-- Total Geral -->
+                    <div style="flex: 1; min-width: 280px; text-align: center; background: #eef4fa; padding: 20px; border-radius: 28px; border: 2px dashed #3aa87e; box-shadow: 0 6px 16px rgba(0,0,0,0.05);">
+                        <div style="font-size: 0.9rem; font-weight: 800; color: #1f5068; text-transform: uppercase; margin-bottom: 6px;">Total Geral das Despesas Fixas</div>
+                        <span class="total-percent-badge" style="background: #3aa87e; font-size: 1.4rem !important; padding: 8px 24px; border-radius: 40px; display: inline-block; font-weight: 800;" id="totalGeralDespesasBadge">R$ 0,00</span>
+                    </div>
+
+                    <!-- Rateio Dia 20 -->
+                    <div style="flex: 1; min-width: 250px; background: rgba(255,255,255,0.7); padding: 16px; border-radius: 24px; border-left: 5px solid #3aa87e; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+                        <div style="font-size: 0.85rem; font-weight: 700; color: #4a6f8a; text-transform: uppercase; margin-bottom: 8px;"><i class="fas fa-calculator"></i> Rateio Vencimento Dia 20</div>
+                        <div style="font-size: 0.95rem; color: #2c5a78; font-weight: 600; margin-bottom: 4px;">👩 Para Fabi: <strong id="rateioFabiDia20" style="color: #3aa87e;">R$ 0,00</strong></div>
+                        <div style="font-size: 0.95rem; color: #2c5a78; font-weight: 600;">👨 Para Marcão: <strong id="rateioMarcaoDia20" style="color: #3aa87e;">R$ 0,00</strong></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- FIM DESPESAS -->
+    <!-- ============ INVESTIMENTOS ============ -->
+    <div id="tabInvest" class="tab-content">
+        <h2><i class="fas fa-chart-line"></i> Investimentos</h2>
+
+        <div class="invest-stats-card">
+            <div class="invest-stats-title">
+                <i class="fas fa-chart-pie"></i> 📈 Resumo mensal - Total a investir
+            </div>
+            <div class="invest-summary-grid">
+                <div class="invest-summary-item">
+                    <div class="invest-summary-label">💰 META COMPROMISSO</div>
+                    <div class="invest-summary-value" id="investBaseValue">R$ 0,00</div>
+                    <div style="font-size:0.8rem; color:#4a6f8a; font-weight:600;" id="metaPercentDisplay">(15% da renda + filhos)</div>
+                </div>
+                <div class="invest-summary-item">
+                    <div class="invest-summary-label">⚡ COBERTO PELO SALDO</div>
+                    <div class="invest-summary-value" id="investExcedenteValue">R$ 0,00</div>
+                    <div style="font-size:0.8rem; color:#4a6f8a; font-weight:600;">(saldo positivo do mês)</div>
+                </div>
+                <div class="invest-summary-item">
+                    <div class="invest-summary-label">🎯 FALTA PARA A META</div>
+                    <div class="invest-summary-value" id="investTotalValue">R$ 0,00</div>
+                    <div style="font-size:0.8rem; color:#3aa87e; font-weight:600;">(meta consolidada − saldo coberto)</div>
+                </div>
+            </div>
+
+            <div class="invest-note">
+                <i class="fas fa-info-circle"></i> A <strong>META COMPROMISSO</strong> é a soma da meta do casal + investimentos/metas dos filhos. O <strong>saldo positivo do mês</strong> (Renda − Despesas) abate essa meta consolidada. Se o saldo superar a meta, o excedente aparece como <strong>sugestão de distribuição</strong> entre os ativos.
+            </div>
+        </div>
+
+        <div class="distribute-excedente-bar">
+            <div>
+                <label><i class="fas fa-chart-line"></i> Distribuir Excedente:</label>
+                <select id="distributeMode">
+                    <option value="proportional">Proporcional ao investimento base</option>
+                    <option value="equal">Igual entre todos os ativos</option>
+                </select>
+            </div>
+            <button id="btnDistributeExcedente" class="btn-distribute"><i class="fas fa-calculator"></i> Aplicar distribuição</button>
+            <div class="excedente-suggestion">
+                <i class="fas fa-lightbulb"></i> Excedente disponível: <span id="excedenteDisponivelLabel">R$ 0,00</span>
+            </div>
+        </div>
+
+        <table class="data-table" id="investTable">
+            <thead>
+                <tr>
+                    <th>Ativo</th>
+                    <th>Investimento Base (R$)</th>
+                    <th>Sugestão Excedente (R$)</th>
+                    <th>Total Mensal (R$)</th>
+                </tr>
+            </thead>
+            <tbody id="investTbody"></tbody>
+            <tfoot>
+                <tr style="background:#eef4fa; font-weight:700;">
+                    <td><strong>TOTAIS</strong></td>
+                    <td id="totalBaseFooter">R$ 0,00</td>
+                    <td id="totalExcedenteFooter">R$ 0,00</td>
+                    <td id="totalGeralFooter">R$ 0,00</td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="action-buttons">
+            <button id="resetInvestDefault" class="btn-secondary">Restaurar padrão</button>
+        </div>
+    </div>
+    <!-- FIM INVESTIMENTOS -->
+
+    <!-- ============ EVOLUÇÃO PATRIMONIAL ============ -->
+    <div id="tabPatrimonio" class="tab-content">
+        <h2 style="margin-bottom:24px; color:#1a506b; font-size:1.5rem;"><i class="fas fa-treemap"></i> Evolução Patrimonial (12 meses)</h2>
+
+        <div class="patrimonio-input-box">
+            <label><i class="fas fa-wallet"></i> Patrimônio Inicial (R$):</label>
+            <input type="text" id="patrimonioInicialInput" value="0,00">
+            <button id="btnAtualizarPatrimonio" class="btn-secondary" style="padding:10px 24px; font-size:1rem;"><i class="fas fa-sync-alt"></i> Atualizar gráfico</button>
+        </div>
+
+        <div class="chart-box" style="padding:24px;">
+            <canvas id="patrimonioChart" height="320"></canvas>
+            <p class="patrimonio-legend">
+                <span style="color:#fb8c42;">● Aporte Real do Mês</span> &nbsp;|&nbsp;
+                <span style="color:#3aa87e;">● Patrimônio Acumulado</span>
+            </p>
+        </div>
+
+        <div class="invest-note" style="margin-top:24px; font-size:0.95rem;">
+            <i class="fas fa-info-circle"></i> O <strong>Aporte Real do Mês</strong> é o valor efetivamente investido (meta coberta pelo saldo + excedente distribuído). O <strong>Patrimônio Acumulado</strong> soma esses aportes consecutivamente ao longo dos 12 meses, partindo do <strong>Patrimônio Inicial</strong> declarado.
+        </div>
+    </div>
+    <!-- FIM PATRIMONIO -->
+
+    <div class="footer-note">📅 Dados salvos por mês/ano · Armazenamento local automático</div>
+</div>
+<!-- fecha .app-container -->
+<!-- ========================================================= -->
+<!-- FIREBASE (opcional) -->
+<!-- ========================================================= -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+     apiKey: "AIzaSyAOphvkmrzZ9mIWdPhYHdOZEpqM7N61iVo",
+  authDomain: "planer-familiar.firebaseapp.com",
+  projectId: "planer-familiar",
+  storageBucket: "planer-familiar.firebasestorage.app",
+  messagingSenderId: "696468956797",
+  appId: "1:696468956797:web:84ad3bbb1151c6449b3314"
+};
+  try {
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    window.plannerFirebase = { auth, db, doc, getDoc, setDoc, onAuthStateChanged };
+    signInAnonymously(auth)
+      .then(() => console.log("Firebase conectado"))
+      .catch((err) => console.warn("Firebase offline — usando localStorage:", err));
+  } catch (e) {
+    console.warn("Firebase indisponível:", e);
+  }
+</script>
+
+<!-- ========================================================= -->
+<!-- SCRIPT PRINCIPAL -->
+<!-- ========================================================= -->
+<script>
+/* ================= UTILITÁRIOS ================= */
+function formatReal(v) { return "R$ " + (v || 0).toFixed(2).replace('.', ','); }
+
+function parseNumber(str) {
+    if (!str && str !== 0) return 0;
+    let cleaned = str.toString().trim();
+    cleaned = cleaned.replace(/\./g, '').replace(',', '.');
+    cleaned = cleaned.replace(/[^\d.-]/g, '');
+    let n = parseFloat(cleaned);
+    return isNaN(n) ? 0 : n;
+}
+
+function formatNumberInput(value) {
+    return (value || 0).toFixed(2).replace('.', ',');
+}
+
+/* ================= DEFAULTS ================= */
+function buildDefaultIncomes() {
+    return [
+        { id: "fabi",    name: "Fabi",      tipo: "casal", dia20: 0, dia5: 0, outros: 0 },
+        { id: "marcao",  name: "Marcão",    tipo: "casal", dia20: 0, dia5: 0, outros: 0 },
+        { id: "marcos",  name: "Marcos R.", tipo: "filho", dia20: 0, dia5: 0, outros: 0 },
+        { id: "marcela", name: "Marcela",   tipo: "filho", dia20: 0, dia5: 0, outros: 0 },
+        { id: "manoela", name: "Manoela",   tipo: "filho", dia20: 0, dia5: 0, outros: 0 }
+    ];
+}
+
+function buildDefaultExpenses() {
+    return [
+        { id: "e1",  descricao: "Conta de Luz",                 valor: 0, vencimento: 5,  pago: false },
+        { id: "e2",  descricao: "Conta Tv / Internet",          valor: 0, vencimento: 5,  pago: false },
+        { id: "e3",  descricao: "Plano Cel Mãe",                valor: 0, vencimento: 5,  pago: false },
+        { id: "e4",  descricao: "Cartão Itaú Seguro Iphone 8",  valor: 0, vencimento: 5,  pago: false },
+        { id: "e5",  descricao: "Cartão Carrefour 12",          valor: 0, vencimento: 5,  pago: false },
+        { id: "e6",  descricao: "Plano Cel Pai",                valor: 0, vencimento: 5,  pago: false },
+        { id: "e7",  descricao: "Ração Pet's",                  valor: 0, vencimento: 5,  pago: false },
+        { id: "e8",  descricao: "Cartão Nubank Fabi",           valor: 0, vencimento: 5,  pago: false },
+        { id: "e9",  descricao: "Faculdade Manoela 50%",        valor: 0, vencimento: 5,  pago: false },
+        { id: "e10", descricao: "VAN Faculdade",                valor: 0, vencimento: 5,  pago: false },
+        { id: "e11", descricao: "Vazio",                        valor: 0, vencimento: 5,  pago: false },
+        { id: "e12", descricao: "Gás",                          valor: 0, vencimento: 5,  pago: false },
+
+        { id: "e13", descricao: "Conta de Água",                valor: 0, vencimento: 20, pago: false },
+        { id: "e14", descricao: "Conta I.P.T.U 26",             valor: 0, vencimento: 20, pago: false },
+        { id: "e15", descricao: "Cartão Porto HBO MAX 28",      valor: 0, vencimento: 20, pago: false },
+        { id: "e16", descricao: "Cartão Nubank 28",             valor: 0, vencimento: 20, pago: false },
+        { id: "e17", descricao: "Franquia Celular",             valor: 0, vencimento: 20, pago: false },
+        { id: "e18", descricao: "Ração Pet's",                  valor: 0, vencimento: 20, pago: false },
+        { id: "e19", descricao: "Convênio Pet",                 valor: 0, vencimento: 20, pago: false },
+        { id: "e20", descricao: "Reserva Manoela",              valor: 0, vencimento: 20, pago: false },
+        { id: "e21", descricao: "Faculdade Manoela 50%",        valor: 0, vencimento: 20, pago: false },
+        { id: "e22", descricao: "VAN Faculdade",                valor: 0, vencimento: 20, pago: false },
+        { id: "e23", descricao: "Vazio",                        valor: 0, vencimento: 20, pago: false },
+        { id: "e24", descricao: "Vazio",                        valor: 0, vencimento: 20, pago: false }
+    ];
+}
+
+function buildDefaultInvestments() {
+    return [
+        { id: "i1", name: "Tesouro Direto",      val: 0, excedente: 0 },
+        { id: "i2", name: "CDB/Renda Fixa",      val: 0, excedente: 0 },
+        { id: "i3", name: "Fundos Imobiliários", val: 0, excedente: 0 },
+        { id: "i4", name: "Ações",               val: 0, excedente: 0 },
+        { id: "i5", name: "Criptomoedas",        val: 0, excedente: 0 }
+    ];
+}
+
+/* ================= STATE ================= */
+const state = {
+    currentMonth: "Janeiro",
+    currentYear: 2027,
+    metaPercent: 15,
+    filhosPercent: 50,
+    casaPercent: 30,
+    patrimonioInicial: 0,
+    incomes: buildDefaultIncomes(),
+    expenses: buildDefaultExpenses(),
+    investments: buildDefaultInvestments(),
+    monthlyBalances: {},
+    monthlyInvestments: {},
+    monthlyExcedentes: {}
+};
+
+const MONTHS_MAP = {
+    "Janeiro": 1, "Fevereiro": 2, "Março": 3, "Abril": 4,
+    "Maio": 5, "Junho": 6, "Julho": 7, "Agosto": 8,
+    "Setembro": 9, "Outubro": 10, "Novembro": 11, "Dezembro": 12
+};
+const MONTHS_LIST = Object.keys(MONTHS_MAP);
+
+function getCompetenciaKey(monthName, year) {
+    let m = MONTHS_MAP[monthName] || 1;
+    return `${year}-${String(m).padStart(2, '0')}`;
+}
+function getStorageKey() {
+    return "braga_data_" + getCompetenciaKey(state.currentMonth, state.currentYear);
+}
+/* ================= CÁLCULOS / GETTERS ================= */
+
+function getRendaTotal() {
+    return state.incomes.reduce((sum, inc) => sum + (inc.dia20||0) + (inc.dia5||0) + (inc.outros||0), 0);
+}
+function getRendimentoIndividual(memberName) {
+    let inc = state.incomes.find(i => i.name === memberName);
+    if (!inc) return 0;
+    return (inc.dia20||0) + (inc.dia5||0) + (inc.outros||0);
+}
+function getRendaCasal() {
+    return getRendimentoIndividual("Fabi") + getRendimentoIndividual("Marcão");
+}
+function getTotalFilhos() {
+    return state.incomes.filter(i => i.tipo === "filho")
+        .reduce((sum, inc) => sum + (inc.dia20||0) + (inc.dia5||0) + (inc.outros||0), 0);
+}
+function getFilhosDestinado() {
+    return getTotalFilhos() * (state.filhosPercent / 100);
+}
+function getCasaDestinado() {
+    return getTotalFilhos() * (state.casaPercent / 100);
+}
+function getFilhosSaldoLivre() {
+    return getTotalFilhos() - getFilhosDestinado() - getCasaDestinado();
+}
+function getDespesasPorVencimento(dia) {
+    return state.expenses.filter(e => e.vencimento === dia).reduce((sum, e) => sum + e.valor, 0);
+}
+function getDespesasTotais() {
+    return getDespesasPorVencimento(5) + getDespesasPorVencimento(20);
+}
+function getMetaValor() {
+    return getRendaCasal() * (state.metaPercent / 100);
+}
+function getMetaConsolidada() {
+    return getMetaValor() + getFilhosDestinado();
+}
+function getFaturamentoDia20() {
+    return state.incomes.reduce((sum, inc) => sum + (inc.dia20||0), 0);
+}
+function getFaturamentoDia5() {
+    return state.incomes.reduce((sum, inc) => sum + (inc.dia5||0) + (inc.outros||0), 0);
+}
+function getSobrasDia20() {
+    return getFaturamentoDia20() - getDespesasPorVencimento(20);
+}
+function getSobrasDia5() {
+    return getFaturamentoDia5() - getDespesasPorVencimento(5);
+}
+function getSaldoMes() {
+    return getRendaTotal() - getDespesasTotais();
+}
+function getSaldoCoberturaMeta() {
+    return Math.min(Math.max(getSaldoMes(), 0), getMetaConsolidada());
+}
+function getExcedenteValue() {
+    return Math.max(getSaldoMes() - getMetaConsolidada(), 0);
+}
+function getFaltaMeta() {
+    return Math.max(getMetaConsolidada() - getSaldoCoberturaMeta(), 0);
+}
+function getTotalSugestaoExcedente() {
+    return state.investments.reduce((sum, i) => sum + (i.excedente||0), 0);
+}
+function getCotaResponsabilidade() {
+    const despesasFixas = getDespesasTotais();
+    const custeioCasa = getCasaDestinado();
+    const metaPais = getMetaValor();
+    return ((despesasFixas - custeioCasa) + metaPais) / 2;
+}
+function getSobraFabi() {
+    return getRendimentoIndividual("Fabi") - getCotaResponsabilidade();
+}
+function getSobraMarcao() {
+    return getRendimentoIndividual("Marcão") - getCotaResponsabilidade();
+}
+function getCotaDia5() {
+    const desp5 = getDespesasPorVencimento(5);
+    const desp20 = getDespesasPorVencimento(20);
+    const despTotal = desp5 + desp20;
+    const custeioCasa = getCasaDestinado();
+    let custeioCasaDia5 = 0;
+    if (despTotal > 0) {
+        custeioCasaDia5 = custeioCasa * (desp5 / despTotal);
+    }
+    const metaPais = getMetaValor();
+    return ((desp5 - custeioCasaDia5) + metaPais) / 2;
+}
+function getCotaDia20() {
+    const desp5 = getDespesasPorVencimento(5);
+    const desp20 = getDespesasPorVencimento(20);
+    const despTotal = desp5 + desp20;
+    const custeioCasa = getCasaDestinado();
+    let custeioCasaDia20 = 0;
+    if (despTotal > 0) {
+        custeioCasaDia20 = custeioCasa * (desp20 / despTotal);
+    }
+    const metaPais = getMetaValor();
+    return ((desp20 - custeioCasaDia20) + metaPais) / 2;
+}
+function getSobraFabiDia5() {
+    let fabi = state.incomes.find(i => i.name === "Fabi");
+    let rendDia5 = (fabi?.dia5 || 0) + (fabi?.outros || 0);
+    return rendDia5 - getCotaDia5();
+}
+function getSobraFabiDia20() {
+    let fabi = state.incomes.find(i => i.name === "Fabi");
+    let rendDia20 = (fabi?.dia20 || 0);
+    return rendDia20 - getCotaDia20();
+}
+function getSobraMarcaoDia5() {
+    let marcao = state.incomes.find(i => i.name === "Marcão");
+    let rendDia5 = (marcao?.dia5 || 0) + (marcao?.outros || 0);
+    return rendDia5 - getCotaDia5();
+}
+function getSobraMarcaoDia20() {
+    let marcao = state.incomes.find(i => i.name === "Marcão");
+    let rendDia20 = (marcao?.dia20 || 0);
+    return rendDia20 - getCotaDia20();
+}
+/* ================= RENDER: RENDIMENTOS ================= */
+function renderIncomesTable() {
+    let html = '';
+    state.incomes.forEach((inc, i) => {
+        let liq = (inc.dia20||0) + (inc.dia5||0) + (inc.outros||0);
+        let labelExtra = '';
+        if (inc.name === "Marcela") labelExtra = ' <span style="font-size:0.7rem;color:#6b8ba3;">(Combustível / Casa)</span>';
+        if (inc.name === "Manoela") labelExtra = ' <span style="font-size:0.7rem;color:#6b8ba3;">(Integral Dia 20)</span>';
+        html += `<tr data-row="${i}">
+            <td>${inc.name}${labelExtra}</td>
+            <td><input type="text" class="income-dia20" data-idx="${i}" value="${formatNumberInput(inc.dia20||0)}"></td>
+            <td><input type="text" class="income-dia5" data-idx="${i}" value="${formatNumberInput(inc.dia5||0)}"></td>
+            <td><input type="text" class="income-outros" data-idx="${i}" value="${formatNumberInput(inc.outros||0)}"></td>
+            <td class="liq-cell">${formatNumberInput(liq)}</td>
+        </tr>`;
+    });
+    document.getElementById("incomeTbody").innerHTML = html;
+    document.getElementById("totalLiquidoDisplay").innerHTML = formatReal(getRendaTotal());
+
+    document.querySelectorAll(".income-dia20, .income-dia5, .income-outros").forEach(inp => {
+        inp.addEventListener("input", function() {
+            let idx = parseInt(this.dataset.idx);
+            let field = this.classList.contains("income-dia20") ? "dia20"
+                      : this.classList.contains("income-dia5") ? "dia5" : "outros";
+            state.incomes[idx][field] = parseNumber(this.value);
+            let inc = state.incomes[idx];
+            let liq = (inc.dia20||0) + (inc.dia5||0) + (inc.outros||0);
+            let rowEl = document.querySelector(`#incomeTbody tr[data-row="${idx}"]`);
+            if (rowEl) rowEl.querySelector(".liq-cell").innerText = formatNumberInput(liq);
+            document.getElementById("totalLiquidoDisplay").innerHTML = formatReal(getRendaTotal());
+            renderDashboard();
+            saveCurrentMonthData();
+        });
+        inp.addEventListener("blur", function() {
+            let idx = parseInt(this.dataset.idx);
+            let field = this.classList.contains("income-dia20") ? "dia20"
+                      : this.classList.contains("income-dia5") ? "dia5" : "outros";
+            this.value = formatNumberInput(state.incomes[idx][field]);
+        });
+    });
+}
+
+/* ================= RENDER: DESPESAS ================= */
+function renderExpensesTables() {
+    let html5 = '';
+    state.expenses.filter(e => e.vencimento === 5).forEach(e => {
+        html5 += `<tr data-exp-id="${e.id}" class="${e.pago ? 'pago' : ''}">
+            <td><button class="btn-pg ${e.pago ? 'pago' : ''}" data-exp-id="${e.id}">PG</button></td>
+            <td><input type="text" class="expense-desc-input" data-exp-id="${e.id}" value="${e.descricao.replace(/"/g, '&quot;')}"></td>
+            <td style="text-align:right;"><input type="text" class="expense-val-input" data-exp-id="${e.id}" value="${formatNumberInput(e.valor)}" ${e.pago ? 'readonly' : ''}></td>
+        </tr>`;
+    });
+    document.getElementById("expensesDia5Tbody").innerHTML = html5;
+
+    let html20 = '';
+    state.expenses.filter(e => e.vencimento === 20).forEach(e => {
+        html20 += `<tr data-exp-id="${e.id}" class="${e.pago ? 'pago' : ''}">
+            <td><button class="btn-pg ${e.pago ? 'pago' : ''}" data-exp-id="${e.id}">PG</button></td>
+            <td><input type="text" class="expense-desc-input" data-exp-id="${e.id}" value="${e.descricao.replace(/"/g, '&quot;')}"></td>
+            <td style="text-align:right;"><input type="text" class="expense-val-input" data-exp-id="${e.id}" value="${formatNumberInput(e.valor)}" ${e.pago ? 'readonly' : ''}></td>
+        </tr>`;
+    });
+    document.getElementById("expensesDia20Tbody").innerHTML = html20;
+
+    bindExpenseListeners();
+    updateExpenseTotals();
+}
+
+function bindExpenseListeners() {
+    document.querySelectorAll(".expense-desc-input").forEach(inp => {
+        inp.addEventListener("input", function() {
+            let id = this.dataset.expId;
+            let exp = state.expenses.find(e => e.id === id);
+            if (exp) { exp.descricao = this.value; updateCharts(); saveCurrentMonthData(); }
+        });
+    });
+
+    document.querySelectorAll(".expense-val-input").forEach(inp => {
+        inp.addEventListener("input", function() {
+            let id = this.dataset.expId;
+            let exp = state.expenses.find(e => e.id === id);
+            if (exp && !exp.pago) {
+                exp.valor = parseNumber(this.value);
+                updateExpenseTotals();
+                renderDashboard();
+                saveCurrentMonthData();
+            }
+        });
+        inp.addEventListener("blur", function() {
+            let id = this.dataset.expId;
+            let exp = state.expenses.find(e => e.id === id);
+            if (exp) this.value = formatNumberInput(exp.valor);
+        });
+    });
+
+    document.querySelectorAll(".btn-pg").forEach(btn => {
+        btn.addEventListener("click", function() {
+            let id = this.dataset.expId;
+            let exp = state.expenses.find(e => e.id === id);
+            if (!exp) return;
+            exp.pago = !exp.pago;
+            renderExpensesTables();
+            renderDashboard();
+            updateCharts();
+            saveCurrentMonthData();
+        });
+    });
+}
+
+function updateExpenseTotals() {
+    const t5 = getDespesasPorVencimento(5);
+    const t20 = getDespesasPorVencimento(20);
+    const tTotal = t5 + t20;
+
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = formatReal(val); };
+    set("totalDia5Badge", t5);
+    set("totalDia20Badge", t20);
+    set("totalDia5Footer", t5);
+    set("totalDia20Footer", t20);
+    set("totalGeralDespesasBadge", tTotal);
+    set("rateioFabiDia5", getCotaDia5());
+    set("rateioMarcaoDia5", getCotaDia5());
+    set("rateioFabiDia20", getCotaDia20());
+    set("rateioMarcaoDia20", getCotaDia20());
+}
+/* ================= RENDER: INVESTIMENTOS ================= */
+function renderInvestTable() {
+    const tbody = document.getElementById("investTbody");
+    if (!tbody) return;
+
+    let html = '';
+    state.investments.forEach((inv, i) => {
+        const total = (inv.val || 0) + (inv.excedente || 0);
+        html += `<tr data-inv-row="${i}">
+            <td>${inv.name}</td>
+            <td><input type="text" class="inv-base-input" data-idx="${i}" value="${formatNumberInput(inv.val||0)}"></td>
+            <td class="invest-suggestion-cell"><input type="text" class="inv-exc-input" data-idx="${i}" value="${formatNumberInput(inv.excedente||0)}"></td>
+            <td class="liq-cell">${formatNumberInput(total)}</td>
+        </tr>`;
+    });
+    tbody.innerHTML = html;
+
+    // listeners base
+    document.querySelectorAll(".inv-base-input").forEach(inp => {
+        inp.addEventListener("input", function() {
+            let i = parseInt(this.dataset.idx);
+            state.investments[i].val = parseNumber(this.value);
+            updateInvestTotals();
+            renderDashboard();
+            saveCurrentMonthData();
+        });
+        inp.addEventListener("blur", function() {
+            let i = parseInt(this.dataset.idx);
+            this.value = formatNumberInput(state.investments[i].val);
+        });
+    });
+
+    // listeners excedente
+    document.querySelectorAll(".inv-exc-input").forEach(inp => {
+        inp.addEventListener("input", function() {
+            let i = parseInt(this.dataset.idx);
+            state.investments[i].excedente = parseNumber(this.value);
+            updateInvestTotals();
+            renderPatrimonioChart();
+            saveCurrentMonthData();
+        });
+        inp.addEventListener("blur", function() {
+            let i = parseInt(this.dataset.idx);
+            this.value = formatNumberInput(state.investments[i].excedente);
+        });
+    });
+
+    updateInvestTotals();
+}
+
+function updateInvestTotals() {
+    const totalBase = state.investments.reduce((s, i) => s + (i.val||0), 0);
+    const totalExc  = state.investments.reduce((s, i) => s + (i.excedente||0), 0);
+    const totalGeral = totalBase + totalExc;
+
+    const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = formatReal(val); };
+    setTxt("totalBaseFooter", totalBase);
+    setTxt("totalExcedenteFooter", totalExc);
+    setTxt("totalGeralFooter", totalGeral);
+
+    // Resumo superior
+    setTxt("investBaseValue", getMetaConsolidada());
+    setTxt("investExcedenteValue", getSaldoCoberturaMeta());
+    setTxt("investTotalValue", getFaltaMeta());
+    const metaPctEl = document.getElementById("metaPercentDisplay");
+    if (metaPctEl) metaPctEl.textContent = `(${state.metaPercent}% da renda + filhos)`;
+
+    // Excedente disponível
+    const excDisp = document.getElementById("excedenteDisponivelLabel");
+    if (excDisp) excDisp.textContent = formatReal(getExcedenteValue());
+
+    // Atualizar linha "total mensal" de cada ativo
+    state.investments.forEach((inv, i) => {
+        const row = document.querySelector(`#investTbody tr[data-inv-row="${i}"] .liq-cell`);
+        if (row) row.innerText = formatNumberInput((inv.val||0) + (inv.excedente||0));
+    });
+}
+
+/* ================= DISTRIBUIR EXCEDENTE ================= */
+function aplicarDistribuicaoExcedente() {
+    const exc = getExcedenteValue();
+    if (exc <= 0) {
+        alert("Não há excedente disponível para distribuir.");
+        return;
+    }
+    const mode = document.getElementById("distributeMode").value;
+    state.investments.forEach(i => i.excedente = 0);
+
+    if (mode === "equal") {
+        const share = exc / state.investments.length;
+        state.investments.forEach(i => i.excedente = share);
+    } else {
+        // proporcional ao investimento base
+        const totalBase = state.investments.reduce((s, i) => s + (i.val||0), 0);
+        if (totalBase > 0) {
+            state.investments.forEach(i => {
+                i.excedente = (i.val / totalBase) * exc;
+            });
+        } else {
+            // fallback: igual
+            const share = exc / state.investments.length;
+            state.investments.forEach(i => i.excedente = share);
+        }
+    }
+
+    renderInvestTable();
+    renderPatrimonioChart();
+    saveCurrentMonthData();
+}
+
+function resetInvestDefault() {
+    if (!confirm("Restaurar os valores padrão de investimentos deste mês?")) return;
+    state.investments = buildDefaultInvestments();
+    renderInvestTable();
+    renderPatrimonioChart();
+    saveCurrentMonthData();
+}
+/* ================= RENDER: DASHBOARD ================= */
+function renderDashboard() {
+    // Stats principais
+    setText("dashTotalIncome",   formatReal(getRendaTotal()));
+    setText("dashTotalExpenses", formatReal(getDespesasTotais()));
+    setText("dashBalance",       formatReal(getSaldoMes()));
+
+    // Metas labels
+    setText("metaResultLabel",       formatReal(getMetaValor()));
+    setText("filhosDestinadoLabel",  formatReal(getFilhosDestinado()));
+    setText("casaDestinadoLabel",    formatReal(getCasaDestinado()));
+
+    // Destino dos filhos
+    setText("destinoTotalFilhos",        formatReal(getTotalFilhos()));
+    setText("destinoInvestimentoFilhos", formatReal(getFilhosDestinado()));
+    setText("destinoCusteioCasa",        formatReal(getCasaDestinado()));
+    setText("destinoSaldoLivreFilhos",   formatReal(getFilhosSaldoLivre()));
+
+    renderContribuicoesFilhos();
+    renderRateioCards();
+    renderSobras();
+
+    updateExpenseTotals();
+    updateInvestTotals();
+
+    // Atualiza gráficos se as abas estiverem visíveis
+    updateCharts();
+    renderPatrimonioChart();
+}
+
+function setText(id, txt) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = txt;
+}
+
+/* ---------- Contribuições fixas dos filhos ---------- */
+function renderContribuicoesFilhos() {
+    const grid = document.getElementById("contribuicoesFilhosGrid");
+    if (!grid) return;
+
+    const filhos = state.incomes.filter(i => i.tipo === "filho");
+    let html = "";
+    let total = 0;
+    filhos.forEach(f => {
+        const v = (f.dia20||0) + (f.dia5||0) + (f.outros||0);
+        total += v;
+        html += `<div class="contribuicao-item">
+            <div class="contribuicao-item-nome">${f.name}</div>
+            <div class="contribuicao-item-valor">${formatReal(v)}</div>
+            <div class="contribuicao-item-desc">Contribuição do mês</div>
+        </div>`;
+    });
+    html += `<div class="contribuicao-total-geral">
+        <div class="contribuicao-item-nome">TOTAL FILHOS</div>
+        <div class="contribuicao-item-valor">${formatReal(total)}</div>
+        <div class="contribuicao-item-desc">Somatório das contribuições</div>
+    </div>`;
+    grid.innerHTML = html;
+}
+
+/* ---------- Rateio cards (dashboard principal) ---------- */
+function renderRateioCards() {
+    const cont = document.getElementById("rateioCardsContainer");
+    if (!cont) return;
+
+    const desp20 = getDespesasPorVencimento(20);
+    const desp5 = getDespesasPorVencimento(5);
+    const totalMes = desp20 + desp5;
+    const sobFabi = getSobraFabi();
+    const sobMarcao = getSobraMarcao();
+
+    const cls = v => v >= 0 ? "" : "negativo";
+
+    cont.innerHTML = `
+        <div class="person-card" style="background:#fef9e6; border: 2px solid #fb8c42;">
+            <div class="person-name"><i class="fas fa-calendar-day"></i> Dia 20</div>
+            <div class="person-value" style="color:#fb8c42;">${formatReal(desp20)}</div>
+            <div class="person-percent">Desp: ${formatReal(desp20)}</div>
+        </div>
+        <div class="person-card" style="background:#fef9e6; border: 2px solid #fb8c42;">
+            <div class="person-name"><i class="fas fa-calendar-day"></i> Dia 5</div>
+            <div class="person-value" style="color:#fb8c42;">${formatReal(desp5)}</div>
+            <div class="person-percent">Desp: ${formatReal(desp5)}</div>
+        </div>
+        <div class="person-card">
+            <div class="person-name"><i class="fas fa-user"></i> Fabi</div>
+            <div class="person-value ${cls(sobFabi)}">${formatReal(sobFabi)}</div>
+            <div class="person-percent">Sobra individual</div>
+        </div>
+        <div class="person-card">
+            <div class="person-name"><i class="fas fa-user"></i> Marcão</div>
+            <div class="person-value ${cls(sobMarcao)}">${formatReal(sobMarcao)}</div>
+            <div class="person-percent">Sobra individual</div>
+        </div>
+        <div class="person-card" style="background:linear-gradient(135deg, #3aa87e, #2c7a5c); color: white;">
+            <div class="person-name" style="color:white;"><i class="fas fa-wallet"></i> TOTAL MÊS</div>
+            <div class="person-value" style="color:white;">${formatReal(totalMes)}</div>
+            <div class="person-percent" style="color:#eafaf3;">Repasse do mês</div>
+        </div>
+    `;
+}
+
+/* ---------- Sobras do mês (cards detalhados) ---------- */
+function renderSobras() {
+    const cont = document.getElementById("sobrasContainer");
+    if (!cont) return;
+
+    const sobFabi   = getSobraFabi();
+    const sobMarcao = getSobraMarcao();
+    const cota      = getCotaResponsabilidade();
+    const sob5      = getSobrasDia5();
+    const sob20     = getSobrasDia20();
+
+    const cls = v => v >= 0 ? "" : "negativo";
+
+    cont.innerHTML = `
+        <div class="sobra-nominal-card dia5">
+            <div class="sobra-nominal-nome"><i class="fas fa-user"></i> Fabi</div>
+            <div class="sobra-nominal-valor ${cls(sobFabi)}">${formatReal(sobFabi)}</div>
+            <div class="sobra-nominal-desc">Sobra individual</div>
+            <div class="sobra-nominal-detail">Cota: ${formatReal(cota)}</div>
+        </div>
+        <div class="sobra-nominal-card dia5">
+            <div class="sobra-nominal-nome"><i class="fas fa-user"></i> Marcão</div>
+            <div class="sobra-nominal-valor ${cls(sobMarcao)}">${formatReal(sobMarcao)}</div>
+            <div class="sobra-nominal-desc">Sobra individual</div>
+            <div class="sobra-nominal-detail">Cota: ${formatReal(cota)}</div>
+        </div>
+        <div class="sobra-nominal-card dia20">
+            <div class="sobra-nominal-nome"><i class="fas fa-calendar-day"></i> Sobras Dia 5</div>
+            <div class="sobra-nominal-valor ${cls(sob5)}">${formatReal(sob5)}</div>
+            <div class="sobra-nominal-desc">Faturamento − Despesas</div>
+        </div>
+        <div class="sobra-nominal-card dia20">
+            <div class="sobra-nominal-nome"><i class="fas fa-calendar-day"></i> Sobras Dia 20</div>
+            <div class="sobra-nominal-valor ${cls(sob20)}">${formatReal(sob20)}</div>
+            <div class="sobra-nominal-desc">Faturamento − Despesas</div>
+        </div>
+    `;
+}
+/* ================= GRÁFICOS ================= */
+let categoryChartInstance = null;
+let balanceChartInstance = null;
+let patrimonioChartInstance = null;
+
+function getCategoriasDespesas() {
+    // Classificação simples por palavra-chave
+    const map = [
+        { cat: "Moradia",      keys: ["luz","água","agua","gás","gas","iptu","condomínio","condominio"] },
+        { cat: "Comunicação",  keys: ["cel","tv","internet","franquia","telefone"] },
+        { cat: "Cartões",      keys: ["cartão","cartao","nubank","porto","carrefour","itaú","itau"] },
+        { cat: "Educação",     keys: ["faculdade","van","escola","curso"] },
+        { cat: "Pets",         keys: ["pet","ração","racao","convênio pet","convenio pet"] },
+        { cat: "Transporte",   keys: ["combustível","combustivel","gasolina","uber"] },
+        { cat: "Saúde",        keys: ["plano de saúde","plano saude","farmácia","farmacia","remédio","remedio"] },
+        { cat: "Reserva",      keys: ["reserva","poupança","poupanca"] }
+    ];
+    const result = {};
+    state.expenses.forEach(e => {
+        if (!e.valor || e.valor <= 0) return;
+        const desc = (e.descricao || "").toLowerCase();
+        let found = null;
+        for (const g of map) {
+            if (g.keys.some(k => desc.includes(k))) { found = g.cat; break; }
+        }
+        const cat = found || "Outros";
+        result[cat] = (result[cat] || 0) + e.valor;
+    });
+    return result;
+}
+
+const CHART_COLORS = [
+    "#fb8c42","#3aa87e","#3282a7","#f9b43a","#9b59b6",
+    "#e74c3c","#16a085","#2c7a5c","#d35400","#7f8c8d"
+];
+
+function updateCharts() {
+    if (typeof Chart === "undefined") return;
+
+    /* ---- Categoria (doughnut + legenda) ---- */
+    const catCanvas = document.getElementById("categoryChart");
+    const legendCol = document.getElementById("categoryLegendCol");
+    if (catCanvas) {
+        const cats = getCategoriasDespesas();
+        const labels = Object.keys(cats);
+        const values = labels.map(l => cats[l]);
+        const total = values.reduce((a,b) => a+b, 0);
+
+        if (categoryChartInstance) categoryChartInstance.destroy();
+        categoryChartInstance = new Chart(catCanvas.getContext("2d"), {
+            type: "doughnut",
+            data: {
+                labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: labels.map((_, i) => CHART_COLORS[i % CHART_COLORS.length]),
+                    borderColor: "#fff",
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                cutout: "60%"
+            }
+        });
+
+        if (legendCol) {
+            if (!labels.length || total === 0) {
+                legendCol.innerHTML = '<div style="color:#6b8ba3;font-size:0.85rem;">Sem despesas lançadas</div>';
+            } else {
+                legendCol.innerHTML = labels.map((l, i) => {
+                    const pct = total > 0 ? (values[i] / total) * 100 : 0;
+                    const color = CHART_COLORS[i % CHART_COLORS.length];
+                    return `<div class="legend-item">
+                        <div class="legend-item-left">
+                            <span class="legend-dot" style="background:${color}"></span>
+                            <span class="legend-name">${l}</span>
+                        </div>
+                        <span class="legend-amount-center">${formatReal(values[i])}</span>
+                        <span class="legend-percent">${pct.toFixed(1)}%</span>
+                    </div>`;
+                }).join("");
+            }
+        }
+    }
+
+    /* ---- Evolução saldo (últimos 6 meses) ---- */
+    const balCanvas = document.getElementById("balanceEvolution");
+    if (balCanvas) {
+        const compAtual = getCompetenciaKey(state.currentMonth, state.currentYear);
+        const [anoAtual, mesAtual] = compAtual.split("-").map(Number);
+
+        const labels = [];
+        const data = [];
+        for (let i = 5; i >= 0; i--) {
+            let m = mesAtual - i;
+            let y = anoAtual;
+            while (m <= 0) { m += 12; y -= 1; }
+            const key = `${y}-${String(m).padStart(2,'0')}`;
+            const nomeMes = MONTHS_LIST[m-1];
+            labels.push(`${nomeMes.slice(0,3)}/${String(y).slice(2)}`);
+
+            // Se for o mês atual, usa saldo atual; senão, tenta aggregates
+            if (key === compAtual) {
+                data.push(getSaldoMes());
+            } else {
+                data.push(state.monthlyBalances[key] || 0);
+            }
+        }
+
+        if (balanceChartInstance) balanceChartInstance.destroy();
+        balanceChartInstance = new Chart(balCanvas.getContext("2d"), {
+            type: "line",
+            data: {
+                labels,
+                datasets: [{
+                    label: "Saldo do mês",
+                    data,
+                    borderColor: "#3aa87e",
+                    backgroundColor: "rgba(58,168,126,0.15)",
+                    fill: true,
+                    tension: 0.35,
+                    pointBackgroundColor: "#3aa87e",
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { ticks: { callback: v => "R$ " + v.toFixed(0) } }
+                }
+            }
+        });
+    }
+}
+
+/* ================= GRÁFICO PATRIMÔNIO ================= */
+function renderPatrimonioChart() {
+    if (typeof Chart === "undefined") return;
+    const canvas = document.getElementById("patrimonioChart");
+    if (!canvas) return;
+
+    const compAtual = getCompetenciaKey(state.currentMonth, state.currentYear);
+    const [anoAtual, mesAtual] = compAtual.split("-").map(Number);
+
+    const labels = [];
+    const aportes = [];
+    const acumulado = [];
+    let acc = state.patrimonioInicial || 0;
+
+    // Aporte real do mês = saldo cobertura + sugestão de excedente (mês atual)
+    const aporteMesAtual = getSaldoCoberturaMeta() + getTotalSugestaoExcedente();
+
+    for (let i = 11; i >= 0; i--) {
+        let m = mesAtual - i;
+        let y = anoAtual;
+        while (m <= 0) { m += 12; y -= 1; }
+        const key = `${y}-${String(m).padStart(2,'0')}`;
+        const nomeMes = MONTHS_LIST[m-1];
+        labels.push(`${nomeMes.slice(0,3)}/${String(y).slice(2)}`);
+
+        let aporte;
+        if (key === compAtual) {
+            aporte = aporteMesAtual;
+        } else {
+            aporte = (state.monthlyInvestments && state.monthlyInvestments[key]) || 0;
+        }
+        aportes.push(aporte);
+        acc += aporte;
+        acumulado.push(acc);
+    }
+
+    if (patrimonioChartInstance) patrimonioChartInstance.destroy();
+    patrimonioChartInstance = new Chart(canvas.getContext("2d"), {
+        type: "bar",
+        data: {
+            labels,
+            datasets: [
+                {
+                    label: "Aporte Real do Mês",
+                    data: aportes,
+                    backgroundColor: "rgba(251,140,66,0.75)",
+                    borderColor: "#fb8c42",
+                    borderWidth: 1,
+                    borderRadius: 6,
+                    yAxisID: "y"
+                },
+                {
+                    label: "Patrimônio Acumulado",
+                    data: acumulado,
+                    type: "line",
+                    borderColor: "#3aa87e",
+                    backgroundColor: "rgba(58,168,126,0.15)",
+                    fill: true,
+                    tension: 0.35,
+                    pointBackgroundColor: "#3aa87e",
+                    pointRadius: 4,
+                    yAxisID: "y1"
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: true, position: "bottom" }
+            },
+            scales: {
+                y: {
+                    position: "left",
+                    ticks: { callback: v => "R$ " + v.toFixed(0) },
+                    title: { display: true, text: "Aporte do mês" }
+                },
+                y1: {
+                    position: "right",
+                    grid: { drawOnChartArea: false },
+                    ticks: { callback: v => "R$ " + v.toFixed(0) },
+                    title: { display: true, text: "Patrimônio" }
+                }
+            }
+        }
+    });
+}
+/* ================= SALVAMENTO / CARREGAMENTO ================= */
+
+async function saveCurrentMonthData() {
+    try {
+        const compKey = getCompetenciaKey(state.currentMonth, state.currentYear);
+        localStorage.setItem("braga_data_" + compKey, JSON.stringify({
+            incomes: state.incomes,
+            expenses: state.expenses,
+            investments: state.investments,
+            metaPercent: state.metaPercent,
+            filhosPercent: state.filhosPercent,
+            casaPercent: state.casaPercent,
+            patrimonioInicial: state.patrimonioInicial
+        }));
+    } catch (e) { console.warn("Falha ao salvar no localStorage:", e); }
+
+    if (!window.plannerFirebase?.auth?.currentUser) return;
+    try {
+        const { db, doc, setDoc } = window.plannerFirebase;
+        const uid = window.plannerFirebase.auth.currentUser.uid;
+        const compKey = getCompetenciaKey(state.currentMonth, state.currentYear);
+
+        const payload = {
+            incomes: state.incomes,
+            expenses: state.expenses,
+            investments: state.investments,
+            metaPercent: state.metaPercent,
+            filhosPercent: state.filhosPercent,
+            casaPercent: state.casaPercent,
+            patrimonioInicial: state.patrimonioInicial
+        };
+        await setDoc(doc(db, "users", uid, "months", compKey), payload);
+
+        state.monthlyBalances[compKey] = getSaldoMes();
+        state.monthlyInvestments[compKey] = getSaldoCoberturaMeta() + getTotalSugestaoExcedente();
+        state.monthlyExcedentes[compKey] = getTotalSugestaoExcedente();
+
+        await setDoc(doc(db, "users", uid, "meta", "aggregates"), {
+            monthlyBalances: state.monthlyBalances,
+            monthlyInvestments: state.monthlyInvestments,
+            monthlyExcedentes: state.monthlyExcedentes,
+            lastMonth: state.currentMonth,
+            lastYear: state.currentYear
+        }, { merge: true });
+    } catch (e) { console.warn("Firebase save falhou:", e); }
+}
+
+async function loadMonthData() {
+    if (!window.plannerFirebase?.auth?.currentUser) return;
+    try {
+        const { db, doc, getDoc } = window.plannerFirebase;
+        const uid = window.plannerFirebase.auth.currentUser.uid;
+        const compKey = getCompetenciaKey(state.currentMonth, state.currentYear);
+        const snap = await getDoc(doc(db, "users", uid, "months", compKey));
+
+        if (snap.exists()) {
+            const d = snap.data();
+            state.incomes = d.incomes || buildDefaultIncomes();
+            state.expenses = d.expenses || buildDefaultExpenses();
+            state.investments = d.investments || buildDefaultInvestments();
+            state.metaPercent = d.metaPercent !== undefined ? d.metaPercent : 15;
+            state.filhosPercent = d.filhosPercent !== undefined ? d.filhosPercent : 50;
+            state.casaPercent = d.casaPercent !== undefined ? d.casaPercent : 30;
+            state.patrimonioInicial = d.patrimonioInicial || 0;
+        } else {
+            await saveCurrentMonthData();
+        }
+    } catch (e) { console.warn("Firebase load falhou:", e); }
+}
+
+async function loadAggregates() {
+    if (!window.plannerFirebase?.auth?.currentUser) return;
+    try {
+        const { db, doc, getDoc } = window.plannerFirebase;
+        const uid = window.plannerFirebase.auth.currentUser.uid;
+        const snap = await getDoc(doc(db, "users", uid, "meta", "aggregates"));
+        if (snap.exists()) {
+            const data = snap.data();
+            state.monthlyBalances    = data.monthlyBalances    || {};
+            state.monthlyInvestments = data.monthlyInvestments || {};
+            state.monthlyExcedentes  = data.monthlyExcedentes  || {};
+        }
+    } catch (e) { console.warn("Firebase aggregates falhou:", e); }
+}
+
+function loadFromLocalStorage() {
+    const compKey = getCompetenciaKey(state.currentMonth, state.currentYear);
+    const raw = localStorage.getItem("braga_data_" + compKey);
+    if (!raw) return false;
+    try {
+        const d = JSON.parse(raw);
+        state.incomes           = d.incomes           || buildDefaultIncomes();
+        state.expenses          = d.expenses          || buildDefaultExpenses();
+        state.investments       = d.investments       || buildDefaultInvestments();
+        state.metaPercent       = d.metaPercent       !== undefined ? d.metaPercent       : 15;
+        state.filhosPercent     = d.filhosPercent     !== undefined ? d.filhosPercent     : 50;
+        state.casaPercent       = d.casaPercent       !== undefined ? d.casaPercent       : 30;
+        state.patrimonioInicial = d.patrimonioInicial || 0;
+        return true;
+    } catch (e) { console.warn("localStorage corrompido:", e); return false; }
+}
+
+/* ================= POPULAR SELECTS ================= */
+function populateMonthsYears() {
+    const mSel = document.getElementById("monthSelect");
+    const ySel = document.getElementById("yearSelect");
+    if (mSel) {
+        mSel.innerHTML = MONTHS_LIST.map(m => `<option value="${m}">${m}</option>`).join("");
+        mSel.value = state.currentMonth;
+    }
+    if (ySel) {
+        const years = [];
+        for (let y = 2025; y <= 2035; y++) years.push(y);
+        ySel.innerHTML = years.map(y => `<option value="${y}">${y}</option>`).join("");
+        ySel.value = state.currentYear;
+    }
+}
+
+/* ================= LISTENERS DE UI ================= */
+
+function bindHeaderListeners() {
+    const mSel = document.getElementById("monthSelect");
+    const ySel = document.getElementById("yearSelect");
+    const btnSave = document.getElementById("btnSaveMonth");
+
+    if (mSel) mSel.addEventListener("change", async function() {
+        await saveCurrentMonthData();
+        state.currentMonth = this.value;
+        const found = loadFromLocalStorage();
+        if (!found) {
+            state.incomes = buildDefaultIncomes();
+            state.expenses = buildDefaultExpenses();
+            state.investments = buildDefaultInvestments();
+        }
+        await loadMonthData();
+        syncInputsFromState();
+        renderAll();
+    });
+
+    if (ySel) ySel.addEventListener("change", async function() {
+        await saveCurrentMonthData();
+        state.currentYear = parseInt(this.value);
+        const found = loadFromLocalStorage();
+        if (!found) {
+            state.incomes = buildDefaultIncomes();
+            state.expenses = buildDefaultExpenses();
+            state.investments = buildDefaultInvestments();
+        }
+        await loadMonthData();
+        syncInputsFromState();
+        renderAll();
+    });
+
+    if (btnSave) btnSave.addEventListener("click", async function() {
+        await saveCurrentMonthData();
+        alert("Mês salvo com sucesso!");
+    });
+}
+
+function syncInputsFromState() {
+    setVal("metaPercentInput", state.metaPercent);
+    setVal("filhosPercentInput", state.filhosPercent);
+    setVal("casaPercentInput", state.casaPercent);
+    setVal("patrimonioInicialInput", formatNumberInput(state.patrimonioInicial));
+}
+function setVal(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+}
+
+function bindMetaListeners() {
+    const metaIn = document.getElementById("metaPercentInput");
+    const filhosIn = document.getElementById("filhosPercentInput");
+    const casaIn = document.getElementById("casaPercentInput");
+
+    if (metaIn) metaIn.addEventListener("input", function() {
+        state.metaPercent = Math.max(0, Math.min(100, parseFloat(this.value) || 0));
+        renderDashboard();
+        saveCurrentMonthData();
+    });
+    if (filhosIn) filhosIn.addEventListener("input", function() {
+        state.filhosPercent = Math.max(0, Math.min(100, parseFloat(this.value) || 0));
+        renderDashboard();
+        saveCurrentMonthData();
+    });
+    if (casaIn) casaIn.addEventListener("input", function() {
+        state.casaPercent = Math.max(0, Math.min(100, parseFloat(this.value) || 0));
+        renderDashboard();
+        saveCurrentMonthData();
+    });
+}
+
+function bindPatrimonioListeners() {
+    const inp = document.getElementById("patrimonioInicialInput");
+    const btn = document.getElementById("btnAtualizarPatrimonio");
+
+    if (inp) {
+        inp.addEventListener("input", function() {
+            state.patrimonioInicial = parseNumber(this.value);
+            renderPatrimonioChart();
+        });
+        inp.addEventListener("blur", function() {
+            this.value = formatNumberInput(state.patrimonioInicial);
+            saveCurrentMonthData();
+        });
+    }
+    if (btn) btn.addEventListener("click", function() {
+        state.patrimonioInicial = parseNumber(inp?.value || "0");
+        renderPatrimonioChart();
+        saveCurrentMonthData();
+    });
+}
+
+function bindInvestListeners() {
+    const btnDist = document.getElementById("btnDistributeExcedente");
+    const btnReset = document.getElementById("resetInvestDefault");
+    if (btnDist) btnDist.addEventListener("click", aplicarDistribuicaoExcedente);
+    if (btnReset) btnReset.addEventListener("click", resetInvestDefault);
+}
+
+function bindTabListeners() {
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+            const target = document.getElementById(btn.dataset.tab);
+            if (target) target.classList.add("active");
+
+            if (btn.dataset.tab === "tabDashboard") setTimeout(() => updateCharts(), 50);
+            if (btn.dataset.tab === "tabPatrimonio") setTimeout(() => renderPatrimonioChart(), 50);
+        });
+    });
+}
+
+/* ================= RENDER GERAL ================= */
+function renderAll() {
+    renderIncomesTable();
+    renderExpensesTables();
+    renderInvestTable();
+    renderDashboard();
+    updateCharts();
+    renderPatrimonioChart();
+}
+
+/* ================= INIT ================= */
+async function init() {
+    console.log("Carregando Planer Financeiro 2027...");
+
+    // 1) Tenta carregar do localStorage com o mês/ano default
+    loadFromLocalStorage();
+
+    // 2) Tenta Firebase
+    try {
+        if (window.plannerFirebase?.auth) {
+            await new Promise((resolve) => {
+                const unsub = window.plannerFirebase.onAuthStateChanged(window.plannerFirebase.auth, (user) => {
+                    if (user) { unsub(); resolve(); }
+                });
+                setTimeout(resolve, 3000);
+            });
+            await loadAggregates();
+            await loadMonthData();
+        }
+    } catch (e) {
+        console.warn("Firebase indisponível, usando apenas localStorage:", e);
+    }
+
+    // 3) UI
+    populateMonthsYears();
+    syncInputsFromState();
+    bindHeaderListeners();
+    bindMetaListeners();
+    bindPatrimonioListeners();
+    bindInvestListeners();
+    bindTabListeners();
+
+    renderAll();
+    console.log("App pronto.");
+}
+/* ================= P13: INTERFACE DE SINCRONIZAÇÃO ================= */
+
+// 1. Injeta o botão e o indicador no cabeçalho (ao lado do "Salvar mês")
+function criarInterfaceSync() {
+    const dateControls = document.querySelector(".date-controls");
+    if (!dateControls) return;
+
+    // Indicador de Status
+    const statusBadge = document.createElement("div");
+    statusBadge.id = "syncStatusBadge";
+    statusBadge.style.cssText = "display:flex; align-items:center; gap:6px; font-size:0.85rem; font-weight:700; color:#fff; padding:0 10px; transition:0.3s;";
+    statusBadge.innerHTML = `<span id="syncDot" style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#f9b43a;"></span> <span id="syncText">Iniciando...</span>`;
+    
+    // Botão Sincronizar
+    const btnSync = document.createElement("button");
+    btnSync.id = "btnForceSync";
+    btnSync.className = "btn-save-month"; // usa a mesma classe pra ficar bonito
+    btnSync.style.background = "linear-gradient(135deg, #3282a7, #1f5068)";
+    btnSync.innerHTML = `<i class="fas fa-cloud-download-alt"></i> Sincronizar`;
+    btnSync.title = "Forçar leitura de dados do Firebase";
+
+    dateControls.insertBefore(statusBadge, dateControls.firstChild);
+    dateControls.appendChild(btnSync);
+
+    // Ação do botão
+    btnSync.addEventListener("click", async () => {
+        if (!window.plannerFirebase?.auth?.currentUser) {
+            alert("Você está offline. O Firebase não está conectado.");
+            return;
+        }
+        atualizarStatusSync("sincronizando", "Puxando...");
+        try {
+            await loadAggregates();
+            await loadMonthData();
+            syncInputsFromState();
+            renderAll();
+            atualizarStatusSync("online", "Atualizado");
+        } catch (e) {
+            console.error(e);
+            atualizarStatusSync("offline", "Erro");
+        }
+    });
+}
+
+// 2. Atualiza as cores do status
+function atualizarStatusSync(estado, texto) {
+    const dot = document.getElementById("syncDot");
+    const txt = document.getElementById("syncText");
+    if (!dot || !txt) return;
+
+    txt.innerText = texto;
+    if (estado === "online") dot.style.background = "#3aa87e"; // Verde
+    else if (estado === "offline") dot.style.background = "#e74c3c"; // Vermelho
+    else dot.style.background = "#f9b43a"; // Amarelo
+}
+
+// 3. Monitora o Firebase em tempo real
+function monitorarFirebase() {
+    if (!window.plannerFirebase?.auth) {
+        atualizarStatusSync("offline", "Sem Firebase");
+        return;
+    }
+
+    window.plannerFirebase.onAuthStateChanged(window.plannerFirebase.auth, (user) => {
+        if (user) {
+            atualizarStatusSync("online", "Conectado");
+            // Sincroniza silenciosamente ao conectar
+            loadAggregates().then(() => loadMonthData()).then(() => {
+                syncInputsFromState();
+                renderAll();
+            });
+        } else {
+            atualizarStatusSync("offline", "Offline");
+        }
+    });
+}
+
+// 4. Chama tudo quando o app iniciar
+document.addEventListener("DOMContentLoaded", () => {
+    // Um pequeno delay para garantir que o HTML já foi montado
+    setTimeout(() => {
+        criarInterfaceSync();
+        monitorarFirebase();
+    }, 500);
+});
+/* Aguarda DOM pronto */
+document.addEventListener("DOMContentLoaded", init);
+</script>
+<script>
+  // Registra o Service Worker para transformar em PWA
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then(registration => console.log('Service Worker registrado com sucesso:', registration.scope))
+        .catch(error => console.log('Falha ao registrar Service Worker:', error));
+    });
+  }
+</script>
+</body>
+</html>
