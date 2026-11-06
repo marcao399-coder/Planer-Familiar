@@ -2416,6 +2416,7 @@ function bindHeaderListeners() {
     if (mSel) mSel.addEventListener("change", async function() {
         await saveCurrentMonthData();
         state.currentMonth = this.value;
+        localStorage.setItem("ultimo_mes_planner", this.value);
         const found = loadFromLocalStorage();
         if (!found) {
             state.incomes = buildDefaultIncomes();
@@ -2429,6 +2430,7 @@ function bindHeaderListeners() {
     if (ySel) ySel.addEventListener("change", async function() {
         await saveCurrentMonthData();
         state.currentYear = parseInt(this.value);
+        localStorage.setItem("ultimo_ano_planner", this.value);
         const found = loadFromLocalStorage();
         if (!found) {
             state.incomes = buildDefaultIncomes();
@@ -2493,6 +2495,13 @@ function renderAll() {
 
 async function init() {
     console.log("Carregando Planer Financeiro 2027...");
+    
+    // Puxa o último mês e ano acessados, se existirem
+    const mesSalvo = localStorage.getItem("ultimo_mes_planner");
+    const anoSalvo = localStorage.getItem("ultimo_ano_planner");
+    if (mesSalvo) state.currentMonth = mesSalvo;
+    if (anoSalvo) state.currentYear = parseInt(anoSalvo);
+
     loadFromLocalStorage();
     try {
         if (window.plannerFirebase?.auth) {
